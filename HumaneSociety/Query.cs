@@ -8,9 +8,10 @@ namespace HumaneSociety
 {
     public static class Query
     {
+        public delegate void PerfromCrudOperationOnEmplyee(Employee employee, string crud);
         public static void RunEmployeeQueries(Employee employee, string crud)
         {
-            PerformCrudOperationOnEmployee performCrudDelegate;
+            PerfromCrudOperationOnEmplyee performCrudDelegate;
             switch (crud)
             {
                 case "create":
