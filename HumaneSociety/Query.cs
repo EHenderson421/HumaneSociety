@@ -87,8 +87,28 @@ namespace HumaneSociety
         public static void UpdateEmployeeInfo(Employee employee, string update)
         {
             HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            int employeeNumber
+            int employeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's original"));
+            Employee employeetoUpdate = GetEmployeeByEmployeeNumber(employeeNumber);
+            var employeeInContext = (from u in context.Employees where employeetoUpdate.ID == u.ID select u).FirstOrDefault();
+            employeeInContext.email = employee.email;
+            employeeInContext.lastName = employee.lastName;
+            employeeInContext.employeeNumber = employee.employeeNumber;
+            employeeInContext.firsttName = employee.firsttName;
+            try
+            {
+                context.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
         }
 
+        public static Employee GetEmployeeByEmployeeNumber(int employeeNumber)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var employee = (from e in context.Employees where e.employeeNumber == employeeNumber select e).FirstOrDefault();
+            return employee;
+        }
     }
 }
