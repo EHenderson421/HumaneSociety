@@ -9,6 +9,7 @@ namespace HumaneSociety
     public static class Query
     {
         public delegate void PerfromCrudOperationOnEmplyee(Employee employee, string crud);
+
         public static void RunEmployeeQueries(Employee employee, string crud)
         {
             PerfromCrudOperationOnEmplyee performCrudDelegate;
@@ -39,6 +40,22 @@ namespace HumaneSociety
             }
         }
         
+
+        public static void CreateEmployee(Employee employee, string create)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            context.Employees.InsertOnSubmit(employee);
+            try
+            {
+                context.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+
       
     }
 }

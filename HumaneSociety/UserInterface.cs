@@ -8,6 +8,16 @@ namespace HumaneSociety
 {
     public static class UserInterface
     {
+        internal static void DisplayExceptionMessage(Exception e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void DisplayMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         public static void DisplayUserOptions(List<string> options)
         {
             foreach(string option in options)
@@ -58,6 +68,8 @@ namespace HumaneSociety
                 return false;
             }
         }
+
+        
         public static bool? GetBitData()
         {
             string input = GetUserInput();
