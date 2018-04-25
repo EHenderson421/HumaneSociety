@@ -80,8 +80,15 @@ namespace HumaneSociety
         {
             HumaneSocietyDataContext context = new HumaneSocietyDataContext();
             var employeeInfo = (from i in context.Employees where i.ID == employee.ID select i).FirstOrDefault();
-            //UserInterface.DisplayEmployeeInfo(employeeInfo);
+            UserInterface.DisplayEmployeeInfo(employeeInfo);
         }
-      
+
+
+        public static void UpdateEmployeeInfo(Employee employee, string update)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            int employeeNumber
+        }
+
     }
 }

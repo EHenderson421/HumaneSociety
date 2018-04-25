@@ -8,16 +8,7 @@ namespace HumaneSociety
 {
     public static class UserInterface
     {
-        internal static void DisplayExceptionMessage(Exception e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void DisplayMessage(string message)
-        {
-            Console.WriteLine(message);
-        }
-
+        
         public static void DisplayUserOptions(List<string> options)
         {
             foreach(string option in options)
@@ -210,6 +201,23 @@ namespace HumaneSociety
                     UserInterface.DisplayUserOptions("Input not recognized please try agian");
                     return searchParameters;
             }
+        }
+        internal static void DisplayExceptionMessage(Exception e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void DisplayMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        public static void DisplayEmployeeInfo(Employee employee)
+        {
+            List<string> info = new List<string>() { "ID: " + employee.ID + " Name: " + employee.firsttName, employee.lastName + " UserName: " + employee.userName + " EmployeeNumber: " + employee.employeeNumber + " Email: " + employee.email };
+            DisplayUserOptions(info);
+            Console.ReadLine();
+
         }
     }
 }
