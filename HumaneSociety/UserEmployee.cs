@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace HumaneSociety
 {
@@ -36,7 +37,7 @@ namespace HumaneSociety
             switch (input)
             {
                 case "1":
-                    AddAnimal();
+                    RunAddAnimal();
                     RunUserMenus();
                     return;
                 case "2":
@@ -240,6 +241,33 @@ namespace HumaneSociety
                 Query.RemoveAnimal(animal);
             }
         }
+
+        protected void RunAddAnimal()
+        {
+            List<string> options = new List<string>() { "How would you like to add an Animal? (select number of choice)", "1. Add single animal", "2. Add a list of transferred animals" };
+            UserInterface.DisplayUserOptions(options);
+            string input = UserInterface.GetUserInput();
+            RunUserInput(input);
+        }
+        private void RunAddAnimalInput(string input)
+        {
+            switch (input)
+            {
+                case "1":
+                    AddAnimal();
+                    RunUserMenus();
+                    return;
+                case "2":
+                    List<Animal> transferAnimals = GetAnimalTransferList();
+                    AddAnimalTransferList(transferAnimals);
+                    RunUserMenus();
+                    return;              
+                default:
+                    UserInterface.DisplayUserOptions("Input not accepted please try again");
+                    RunUserMenus();
+                    return;
+            }
+        }
         private void AddAnimal()
         {
             Console.Clear();
@@ -254,6 +282,19 @@ namespace HumaneSociety
             animal.diet = Query.GetDiet();
             animal.location = Query.GetLocation();
             Query.AddAnimal(animal);
+        }
+
+        private List<Animal> GetAnimalTransferList()
+        {
+            List<Animal> transferAnimals = File.ReadAllLines(@"animals.csv").Skip(1).Select(animal => Animal.FromCsv(animal)).ToList();
+            return transferAnimals;
+        }
+        private void AddAnimalTransferList(List<Animal> transferAnimals)
+        {
+            foreach (Animal animal in transferAnimals)
+            {
+                Query.AddAnimal(animal);
+            }
         }
         protected override void LogInPreExistingUser()
         {

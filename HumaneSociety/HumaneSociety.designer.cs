@@ -281,8 +281,40 @@ namespace HumaneSociety
 			this._Room = default(EntityRef<Room>);
 			OnCreated();
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        public static Animal FromCsv(string csvLine)
+        {
+            string[] values = csvLine.Split(',');
+            Animal animal = new Animal();
+            animal.ID = Convert.ToInt32(values[0]);
+            animal.name = values[1];
+            animal.breed = Int32.Parse(values[2]);
+            animal.weight = Int32.Parse(values[3]);
+            animal.age = Int32.Parse(values[4]);
+            animal.diet = Int32.Parse(values[5]);
+            animal.location = Int32.Parse(values[6]);
+            animal.demeanor = values[7];
+            animal.kidFriendly = animal.CSVReturnBool(values[8]);
+            animal.petFriendly = animal.CSVReturnBool(values[9]);
+            animal.gender = animal.CSVReturnBool(values[10]);
+            animal.adoptionStatus = values[11];
+            //animal.Employee_ID = Employee.employeeNumber;
+            return animal;
+        }
+
+        private bool CSVReturnBool(string data)
+        {
+            if(data == "1")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ID
 		{
 			get
