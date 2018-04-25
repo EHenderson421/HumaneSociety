@@ -16,12 +16,12 @@ namespace HumaneSociety
             switch (crud)
             {
                 case "create":
-                    performCrudDelegate = CreateEmployee;
+                    performCrudDelegate = CreateNewEmployee;
                     performCrudDelegate(employee, crud);
                     break;
 
                 case "delete":
-                    performCrudDelegate = DeleteEmployee;
+                    performCrudDelegate = DeleteOldEmployee;
                     performCrudDelegate(employee, crud);
                     break;
 
@@ -45,16 +45,35 @@ namespace HumaneSociety
         {
             HumaneSocietyDataContext context = new HumaneSocietyDataContext();
             context.Employees.InsertOnSubmit(employee);
+
             try
             {
                 context.SubmitChanges();
             }
+
             catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
 
+
+        public static void DeleteOldEmployee(Employee employee, string delete)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var oldEmployee = (from o in context.Employees where o.employeeNumber == employee.employeeNumber && o.lastName == employee.lastName select o).FirstOrDefault();
+            context.Employees.DeleteOnSubmit(oldEmployee);
+
+            try
+            {
+                context.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
       
     }
