@@ -41,7 +41,7 @@ namespace HumaneSociety
         }
         
 
-        public static void CreateEmployee(Employee employee, string create)
+        public static void CreateNewEmployee(Employee employee, string create)
         {
             HumaneSocietyDataContext context = new HumaneSocietyDataContext();
             context.Employees.InsertOnSubmit(employee);
