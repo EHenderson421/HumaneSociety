@@ -26,12 +26,12 @@ namespace HumaneSociety
                     break;
 
                 case "read":
-                    performCrudDelegate = ReadEmployee;
+                    performCrudDelegate = ReadEmployeeInfo;
                     performCrudDelegate(employee, crud);
                     break;
 
                 case "update":
-                    performCrudDelegate = UpdateEmployee;
+                    performCrudDelegate = UpdateEmployeeInfo;
                     performCrudDelegate(employee, crud);
                     break;
 
@@ -75,6 +75,13 @@ namespace HumaneSociety
             }
         }
 
+
+        public static void ReadEmployeeInfo(Employee employee, string read)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var employeeInfo = (from i in context.Employees where i.ID == employee.ID select i).FirstOrDefault();
+            //UserInterface.DisplayEmployeeInfo(employeeInfo);
+        }
       
     }
 }
