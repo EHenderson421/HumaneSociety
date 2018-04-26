@@ -406,7 +406,23 @@ namespace HumaneSociety
             return userExist;
         }
 
+        public static void AddUsernameAndPassword(Employee employee, string userName, string password)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var addEmployee = (from e in db.Employees where e.ID == employee.ID select e).FirstOrDefault();
+            addEmployee.userName = userName;
+            addEmployee.pass = password;
 
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
 
 

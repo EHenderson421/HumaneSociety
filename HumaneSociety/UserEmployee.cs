@@ -348,7 +348,7 @@ namespace HumaneSociety
         {
             GetUserName();
             GetPassword();
-            Query.AddUsernameAndPassword(employee);
+            Query.AddUsernameAndPassword(employee, employee.userName, employee.pass);
         }
 
         private void GetPassword()
