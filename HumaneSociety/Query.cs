@@ -176,5 +176,40 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
+
+        public static List<ClientAnimalJunction> GetPendingAdoptions()
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var pendingAdoption = (from p in context.ClientAnimalJunctions select p).ToList();
+
+            return pendingAdoption;
+        }
+
+        public static void UpdateAdoption(bool approve, ClientAnimalJunction clientAnimalJunction)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            Animal animalAdopted = (from a in context.Animals where clientAnimalJunction.animal == a.ID select a).FirstOrDefault();
+
+            if (approve == true)
+            {
+                clientAnimalJunction.approvalStatus = "approved";
+                animalAdopted.adoptionStatus = "adopted";
+            }
+
+            else
+            {
+                clientAnimalJunction.approvalStatus = "rejected";
+            }
+
+            try
+            {
+                context.SubmitChanges();
+            }
+        
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
     }
 }
