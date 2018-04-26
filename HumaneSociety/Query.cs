@@ -139,11 +139,19 @@ namespace HumaneSociety
         { 
             HumaneSocietyDataContext db = new HumaneSocietyDataContext( "c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
             Table<Client> clients = db.GetTable<Client>();
-            var getClient = (from c in db.Clients where c.userName == userName select c).FirstOrDefault();
+            var getClient = db.Clients.Where(c => c.userName == userName).Select(c => c).FirstOrDefault();
 
-            if (password != getClient.pass)
+            try
             {
-                getClient = null;
+                if (password == getClient.pass)
+                {
+                    return getClient;
+                }
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
             }
             return getClient;
         }
@@ -260,6 +268,27 @@ namespace HumaneSociety
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
+        }
+        public static void UpdateAddress(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.userAddress = client.userAddress;
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void Adopt(Animal animal, Client client)
+        {
+            //submit request
+            //send to employee (task)
         }
     }
 }
