@@ -110,5 +110,15 @@ namespace HumaneSociety
             var employee = (from e in context.Employees where e.employeeNumber == employeeNumber select e).FirstOrDefault();
             return employee;
         }
+
+        public static List <ClientAnimalJunction> GetUserAdoptionStatus(Client client)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var pendingAdoptions = (from p in context.ClientAnimalJunctions where p.client == client.ID select p).ToList();
+
+            return pendingAdoptions;
+        }
+
+
     }
 }
