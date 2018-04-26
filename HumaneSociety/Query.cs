@@ -365,8 +365,7 @@ namespace HumaneSociety
                 var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
                 return shotID;
          }
-
-
+        
         public static void RemoveAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -384,7 +383,21 @@ namespace HumaneSociety
             }
         }
 
+        public static void AddAnimal(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            db.Animals.InsertOnSubmit(animal);
 
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch(Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
 
 
