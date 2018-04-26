@@ -142,14 +142,23 @@ namespace HumaneSociety
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
             Table<Client> clients = db.GetTable<Client>();
-            var getClient = (from c in db.Clients where c.userName == userName select c).FirstOrDefault();
+            var getClient = db.Clients.Where(c => c.userName == userName).Select(c => c).FirstOrDefault();
 
-            if (password != getClient.pass)
+            try
             {
-                getClient = null;
+                if (password == getClient.pass)
+                {
+                    return getClient;
+                }
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
             }
             return getClient;
         }
+
 
         public static void Adopt(Animal animal, Client client)
         {
@@ -159,6 +168,31 @@ namespace HumaneSociety
             var animalWanted = (from a in db.Animals where a.ID == animal.ID select a).FirstOrDefault();
             animalWanted.adoptionStatus = "pending";
             db.ClientAnimalJunctions.InsertOnSubmit(pendingAdopt);
+        }
+
+        public static Table<USState> GetStates()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+            Table<USState> states = db.GetTable<USState>();
+            return states;
+        }
+
+        public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+            Client client = new Client();
+            client.firstName = firstName;
+            client.lastName = lastName;
+            client.userName = username;
+            client.pass = password;
+            client.email = email;
+            UserAddress address = new UserAddress();
+            address.addessLine1 = streetAddress;
+            address.zipcode = zipCode;
+            address.USStates = state;
+            client.userAddress = address.ID;
+            db.Clients.InsertOnSubmit(client);
+
 
             try
             {
@@ -170,7 +204,17 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
 
-            db.Animals.InsertOnSubmit(animalWanted);
+
+            
+
+
+        }
+
+        public static void updateClient(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData = client;
 
             try
             {
@@ -182,6 +226,7 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
+
 
         public static List<ClientAnimalJunction> GetPendingAdoptions()
         {
@@ -207,6 +252,14 @@ namespace HumaneSociety
                 clientAnimalJunction.approvalStatus = "rejected";
             }
 
+        }
+
+
+        public static void UpdateFirstName(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.firstName = client.firstName;
             try
             {
                 db.SubmitChanges();
@@ -217,6 +270,40 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
+
+        public static void UpdateLastName(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.lastName = client.lastName;
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void UpdateUsername(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.userName = client.userName;
+
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
 
         public static IEnumerable<AnimalShotJunction> GetShots(Animal animal)
         {
@@ -232,18 +319,40 @@ namespace HumaneSociety
             animalShot.Animal_ID = animal.ID;
             animalShot.Shot_ID = GetShotID(typeOfShot);
             animalShot.dateRecieved = DateTime.Now;
-            db.AnimalShotJunctions.InsertOnSubmit(animalShotJunction);
+            db.AnimalShotJunctions.InsertOnSubmit(animalShot);
+        }
 
+        public static void UpdateEmail(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.email = client.email;
             try
             {
                 db.SubmitChanges();
             }
+
             catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
-    }
+        public static void UpdateAddress(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.userAddress = client.userAddress;
+
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
 
         public static int GetShotID(string name)
@@ -263,9 +372,10 @@ namespace HumaneSociety
                 {
                     UserInterface.DisplayExceptionMessage(e);
                 }
+            }
                 var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
                 return shotID;
-            }
+            
         }
     }
 }
