@@ -27,3 +27,4 @@ C:\devCode\Visual Studio 2015\Projects\HumaneSociety\HumaneSociety\obj\Debug\Hum
 C:\Users\Ellie\Documents\HumaneSociety\HumaneSociety\bin\Debug\HumaneSociety.exe.config
 C:\Users\Ellie\Documents\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.exe
 C:\Users\Ellie\Documents\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.pdb
+C:\Users\Ellie\Documents\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.csprojResolveAssemblyReference.cache
