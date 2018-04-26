@@ -119,6 +119,11 @@ namespace HumaneSociety
             return pendingAdoptions;
         }
 
-
+        public static Animal GetAnimalByID(int id)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var animal = (from a in context.Animals where a.ID == id select a).FirstOrDefault();
+            return animal;
+        }
     }
 }
