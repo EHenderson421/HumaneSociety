@@ -148,5 +148,12 @@ namespace HumaneSociety
             return getClient;
         }
 
+        public static Table<USState> GetStates()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+            Table<USState> states = db.GetTable<USState>();
+            return states;
+        }
+
     }
 }
