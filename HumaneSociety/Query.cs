@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -125,5 +127,26 @@ namespace HumaneSociety
             var animal = (from a in context.Animals where a.ID == id select a).FirstOrDefault();
             return animal;
         }
+
+        public static Table<Client> RetrieveClients()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+            Table<Client> clients = db.GetTable<Client>();
+            return clients;
+        }
+
+        public static Client GetClient(string userName, string password)
+        { 
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext( "c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+            Table<Client> clients = db.GetTable<Client>();
+            var getClient = (from c in db.Clients where c.userName == userName select c).FirstOrDefault();
+
+            if (password != getClient.pass)
+            {
+                getClient = null;
+            }
+            return getClient;
+        }
+
     }
 }
