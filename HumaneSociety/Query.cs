@@ -211,5 +211,14 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
+
+       public static IEnumerable<AnimalShotJunction> GetShots(Animal animal)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var shots = (from s in context.AnimalShotJunctions where s.Animal_ID == animal.ID select s);
+            return shots;
+        }
+
+
     }
 }
