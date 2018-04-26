@@ -43,7 +43,6 @@ namespace HumaneSociety
             }
         }
 
-
         public static void CreateNewEmployee(Employee employee, string create)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -59,7 +58,6 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
-
 
         public static void DeleteOldEmployee(Employee employee, string delete)
         {
@@ -78,14 +76,12 @@ namespace HumaneSociety
             }
         }
 
-
         public static void ReadEmployeeInfo(Employee employee, string read)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             var employeeInfo = (from i in db.Employees where i.ID == employee.ID select i).FirstOrDefault();
             UserInterface.DisplayEmployeeInfo(employeeInfo);
         }
-
 
         public static void UpdateEmployeeInfo(Employee employee, string update)
         {
@@ -158,8 +154,7 @@ namespace HumaneSociety
             }
             return getClient;
         }
-
-
+        
         public static void Adopt(Animal animal, Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -203,11 +198,6 @@ namespace HumaneSociety
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
-
-
-            
-
-
         }
 
         public static void updateClient(Client client)
@@ -226,7 +216,6 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
-
 
         public static List<ClientAnimalJunction> GetPendingAdoptions()
         {
@@ -253,8 +242,7 @@ namespace HumaneSociety
             }
 
         }
-
-
+        
         public static void UpdateFirstName(Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -337,6 +325,7 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
+
         public static void UpdateAddress(Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -375,7 +364,33 @@ namespace HumaneSociety
             }
                 var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
                 return shotID;
-            
+         }
+
+
+        public static void RemoveAnimal(Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var animalToRemove = (from a in db.Animals where a.ID == animal.ID select a).FirstOrDefault();
+            db.Animals.DeleteOnSubmit(animalToRemove);
+
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch(Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
         }
+
+
+
+
+
+
+
+
+
     }
 }
