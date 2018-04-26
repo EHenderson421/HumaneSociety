@@ -15,6 +15,7 @@ namespace HumaneSociety
         public static void RunEmployeeQueries(Employee employee, string crud)
         {
             PerfromCrudOperationOnEmplyee performCrudDelegate;
+
             switch (crud)
             {
                 case "create":
@@ -41,19 +42,19 @@ namespace HumaneSociety
                     break;
             }
         }
-        
+
 
         public static void CreateNewEmployee(Employee employee, string create)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            context.Employees.InsertOnSubmit(employee);
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            db.Employees.InsertOnSubmit(employee);
 
             try
             {
-                context.SubmitChanges();
+                db.SubmitChanges();
             }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -62,16 +63,16 @@ namespace HumaneSociety
 
         public static void DeleteOldEmployee(Employee employee, string delete)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var oldEmployee = (from o in context.Employees where o.employeeNumber == employee.employeeNumber && o.lastName == employee.lastName select o).FirstOrDefault();
-            context.Employees.DeleteOnSubmit(oldEmployee);
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var oldEmployee = (from o in db.Employees where o.employeeNumber == employee.employeeNumber && o.lastName == employee.lastName select o).FirstOrDefault();
+            db.Employees.DeleteOnSubmit(oldEmployee);
 
             try
             {
-                context.SubmitChanges();
+                db.SubmitChanges();
             }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -80,27 +81,29 @@ namespace HumaneSociety
 
         public static void ReadEmployeeInfo(Employee employee, string read)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var employeeInfo = (from i in context.Employees where i.ID == employee.ID select i).FirstOrDefault();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var employeeInfo = (from i in db.Employees where i.ID == employee.ID select i).FirstOrDefault();
             UserInterface.DisplayEmployeeInfo(employeeInfo);
         }
 
 
         public static void UpdateEmployeeInfo(Employee employee, string update)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             int employeeNumber = int.Parse(UserInterface.GetStringData("employee number", "the employee's original"));
             Employee employeetoUpdate = GetEmployeeByEmployeeNumber(employeeNumber);
-            var employeeInContext = (from u in context.Employees where employeetoUpdate.ID == u.ID select u).FirstOrDefault();
+            var employeeInContext = (from u in db.Employees where employeetoUpdate.ID == u.ID select u).FirstOrDefault();
             employeeInContext.email = employee.email;
             employeeInContext.lastName = employee.lastName;
             employeeInContext.employeeNumber = employee.employeeNumber;
             employeeInContext.firsttName = employee.firsttName;
+
             try
             {
-                context.SubmitChanges();
+                db.SubmitChanges();
             }
-            catch(Exception e)
+
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -113,7 +116,7 @@ namespace HumaneSociety
             return employee;
         }
 
-        public static List <ClientAnimalJunction> GetUserAdoptionStatus(Client client)
+        public static List<ClientAnimalJunction> GetUserAdoptionStatus(Client client)
         {
             HumaneSocietyDataContext context = new HumaneSocietyDataContext();
             var pendingAdoptions = (from p in context.ClientAnimalJunctions where p.client == client.ID select p).ToList();
@@ -136,8 +139,8 @@ namespace HumaneSociety
         }
 
         public static Client GetClient(string userName, string password)
-        { 
-            HumaneSocietyDataContext db = new HumaneSocietyDataContext( "c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
             Table<Client> clients = db.GetTable<Client>();
             var getClient = (from c in db.Clients where c.userName == userName select c).FirstOrDefault();
 
@@ -150,28 +153,31 @@ namespace HumaneSociety
 
         public static void Adopt(Animal animal, Client client)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var pendingAdopt = (from p in context.ClientAnimalJunctions where p.animal == animal.ID && p.client == client.ID select p).FirstOrDefault();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var pendingAdopt = (from p in db.ClientAnimalJunctions where p.animal == animal.ID && p.client == client.ID select p).FirstOrDefault();
             pendingAdopt.approvalStatus = "pending";
-            var animalWanted = (from a in context.Animals where a.ID == animal.ID select a).FirstOrDefault();
+            var animalWanted = (from a in db.Animals where a.ID == animal.ID select a).FirstOrDefault();
             animalWanted.adoptionStatus = "pending";
+            db.ClientAnimalJunctions.InsertOnSubmit(pendingAdopt);
 
-            context.ClientAnimalJunctions.InsertOnSubmit(pendingAdopt);
             try
             {
-                context.SubmitChanges();
+                db.SubmitChanges();
             }
-            catch(Exception e)
+
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
 
-            context.Animals.InsertOnSubmit(animalWanted);
+            db.Animals.InsertOnSubmit(animalWanted);
+
             try
             {
-                context.SubmitChanges();
+                db.SubmitChanges();
             }
-            catch(Exception e)
+
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -179,16 +185,16 @@ namespace HumaneSociety
 
         public static List<ClientAnimalJunction> GetPendingAdoptions()
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var pendingAdoption = (from p in context.ClientAnimalJunctions select p).ToList();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var pendingAdoption = (from p in db.ClientAnimalJunctions select p).ToList();
 
             return pendingAdoption;
         }
 
         public static void UpdateAdoption(bool approve, ClientAnimalJunction clientAnimalJunction)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            Animal animalAdopted = (from a in context.Animals where clientAnimalJunction.animal == a.ID select a).FirstOrDefault();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Animal animalAdopted = (from a in db.Animals where clientAnimalJunction.animal == a.ID select a).FirstOrDefault();
 
             if (approve == true)
             {
@@ -203,22 +209,63 @@ namespace HumaneSociety
 
             try
             {
-                context.SubmitChanges();
+                db.SubmitChanges();
             }
-        
+
             catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
 
-       public static IEnumerable<AnimalShotJunction> GetShots(Animal animal)
+        public static IEnumerable<AnimalShotJunction> GetShots(Animal animal)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var shots = (from s in context.AnimalShotJunctions where s.Animal_ID == animal.ID select s);
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var shots = (from s in db.AnimalShotJunctions where s.Animal_ID == animal.ID select s);
             return shots;
         }
 
+        public static void UpdateShot(string typeOfShot, Animal animal)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            AnimalShotJunction animalShot = new AnimalShotJunction();
+            animalShot.Animal_ID = animal.ID;
+            animalShot.Shot_ID = GetShotID(typeOfShot);
+            animalShot.dateRecieved = DateTime.Now;
+            db.AnimalShotJunctions.InsertOnSubmit(animalShotJunction);
 
+            try
+            {
+                db.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+    }
+
+
+        public static int GetShotID(string name)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            bool shotExist = db.Shots.Any(s => s.name == name);
+            if (shotExist == false)
+            {
+                Shot shotToAdd = new Shot();
+                shotToAdd.name = name;
+                db.Shots.InsertOnSubmit(shotToAdd);
+                try
+                {
+                    db.SubmitChanges();
+                }
+                catch (Exception e)
+                {
+                    UserInterface.DisplayExceptionMessage(e);
+                }
+                var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
+                return shotID;
+            }
+        }
     }
 }
