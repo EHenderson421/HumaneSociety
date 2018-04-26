@@ -155,5 +155,52 @@ namespace HumaneSociety
             return states;
         }
 
+        public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext("c:/Documents/HumaneSociety/HumaneSociety/HumaneSociety.dbml");
+            Client client = new Client();
+            client.firstName = firstName;
+            client.lastName = lastName;
+            client.userName = username;
+            client.pass = password;
+            client.email = email;
+                UserAddress address = new UserAddress();
+                address.addessLine1 = streetAddress;
+                address.zipcode = zipCode;
+                address.USStates = state;
+            client.userAddress = address.ID;
+            db.Clients.InsertOnSubmit(client);
+
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void updateClient(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            db.Clients.InsertOnSubmit(client);
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+        
+        //updateClient homesize, kids,income, password
+        //UpdateFirstName
+        //UpdateLastName
+        //UpdateUsername
+        //UpdateEmail
     }
 }
