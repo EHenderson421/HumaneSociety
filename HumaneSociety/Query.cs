@@ -185,7 +185,8 @@ namespace HumaneSociety
         public static void updateClient(Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            db.Clients.InsertOnSubmit(client);
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData = client;
             try
             {
                 db.SubmitChanges();
@@ -197,10 +198,68 @@ namespace HumaneSociety
             }
         }
         
-        //updateClient homesize, kids,income, password
-        //UpdateFirstName
-        //UpdateLastName
-        //UpdateUsername
-        //UpdateEmail
+        public static void UpdateFirstName(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.firstName = client.firstName;
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void UpdateLastName(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.lastName = client.lastName;
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void UpdateUsername(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.userName = client.userName;
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void UpdateEmail(Client client)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var clientData = db.Clients.Where(c => c.ID == client.ID).Select(c => c).First();
+            clientData.email = client.email;
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
     }
 }
