@@ -53,7 +53,7 @@ namespace HumaneSociety
                 context.SubmitChanges();
             }
 
-            catch (Exception e)
+            catch(Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -71,7 +71,7 @@ namespace HumaneSociety
                 context.SubmitChanges();
             }
 
-            catch (Exception e)
+            catch(Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -100,7 +100,7 @@ namespace HumaneSociety
             {
                 context.SubmitChanges();
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -148,5 +148,33 @@ namespace HumaneSociety
             return getClient;
         }
 
+        public static void Adopt(Animal animal, Client client)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var pendingAdopt = (from p in context.ClientAnimalJunctions where p.animal == animal.ID && p.client == client.ID select p).FirstOrDefault();
+            pendingAdopt.approvalStatus = "pending";
+            var animalWanted = (from a in context.Animals where a.ID == animal.ID select a).FirstOrDefault();
+            animalWanted.adoptionStatus = "pending";
+
+            context.ClientAnimalJunctions.InsertOnSubmit(pendingAdopt);
+            try
+            {
+                context.SubmitChanges();
+            }
+            catch(Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+
+            context.Animals.InsertOnSubmit(animalWanted);
+            try
+            {
+                context.SubmitChanges();
+            }
+            catch(Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
     }
 }
