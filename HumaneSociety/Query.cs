@@ -192,8 +192,6 @@ namespace HumaneSociety
             address.USStates = state;
             client.userAddress = address.ID;
             db.Clients.InsertOnSubmit(client);
-
-
             try
             {
                 db.SubmitChanges();
@@ -203,10 +201,6 @@ namespace HumaneSociety
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
-
-
-            
-
 
         }
 
@@ -374,8 +368,37 @@ namespace HumaneSociety
                 }
             }
                 var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
-                return shotID;
-            
+                return shotID;            
+        }
+
+        public static List<string> GetBreed()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var breedData = db.Breeds.Select(b => b.breed1).ToList();
+            return breedData;
+        }
+
+        public static List<string> GetDiet()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var dietPlans = db.DietPlans.Select(d => d.ToString()).ToList();
+            return dietPlans;
+        }
+
+        public static List<string> GetLocation()
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var occupiedRooms = db.Animals.Select(a => a.Room.ToString()).ToList();
+            var allRooms = db.Rooms.Select(r => r.ToString()).ToList();
+            foreach(string room in occupiedRooms)
+            {
+                if (allRooms.Contains(room))
+                {
+                    allRooms.Remove(room);
+                }
+            }
+            return allRooms;
+
         }
     }
 }
