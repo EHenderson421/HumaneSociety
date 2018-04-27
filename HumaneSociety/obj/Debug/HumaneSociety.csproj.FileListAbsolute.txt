@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 C:\devCode\Visual Studio 2015\Projects\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.csprojResolveAssemblyReference.cache
 C:\devCode\Visual Studio 2015\Projects\HumaneSociety\HumaneSociety\bin\Debug\HumaneSociety.exe.config
+=======
+C:\Users\Ellie\Documents\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.csprojResolveAssemblyReference.cache
+>>>>>>> cc8c0561fb7392996365d8a9292c457d42b90fd2
