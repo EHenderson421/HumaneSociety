@@ -154,7 +154,7 @@ namespace HumaneSociety
             }
             return getClient;
         }
-        
+
         public static void Adopt(Animal animal, Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -241,7 +241,7 @@ namespace HumaneSociety
             }
 
         }
-        
+
         public static void UpdateFirstName(Client client)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -361,11 +361,11 @@ namespace HumaneSociety
                     UserInterface.DisplayExceptionMessage(e);
                 }
             }
-                var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
+            var shotID = (from s in db.Shots where s.name == name select s.ID).FirstOrDefault();
 
-                return shotID;
-         }
-        
+            return shotID;
+        }
+
         public static void RemoveAnimal(Animal animal)
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
@@ -377,7 +377,7 @@ namespace HumaneSociety
                 db.SubmitChanges();
             }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -393,7 +393,7 @@ namespace HumaneSociety
                 db.SubmitChanges();
             }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 UserInterface.DisplayExceptionMessage(e);
             }
@@ -423,7 +423,7 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
 
-                            
+
         }
 
         public static List<string> GetBreed()
@@ -445,7 +445,7 @@ namespace HumaneSociety
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
             var occupiedRooms = db.Animals.Select(a => a.Room.ToString()).ToList();
             var allRooms = db.Rooms.Select(r => r.ToString()).ToList();
-            foreach(string room in occupiedRooms)
+            foreach (string room in occupiedRooms)
             {
                 if (allRooms.Contains(room))
                 {
@@ -453,20 +453,210 @@ namespace HumaneSociety
                 }
             }
             return allRooms;
+        }
+
+        public static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
+        {
+            string name = "";
+            string breed = "";
+            string weight = "";
+            string age = "";
+            string demeanor = "";
+            string kidFriendly = "";
+            string petFriendly = "";
+            updates.TryGetValue(1, out name);
+            updates.TryGetValue(2, out breed);
+            updates.TryGetValue(3, out weight);
+            updates.TryGetValue(4, out age);
+            updates.TryGetValue(5, out demeanor);
+            updates.TryGetValue(6, out kidFriendly);
+            updates.TryGetValue(7, out petFriendly);
+
+            if (name != "")
+            {
+                UpdateName(animal, name);
+            }
+            if (breed != "")
+            {
+                UpdateBreed(animal, breed);
+            }
+            if (weight != "")
+            {
+                UpdateWeight(animal, weight);
+            }
+            if (age != "")
+            {
+                UpdateAge(animal, age);
+            }
+            if (demeanor != "")
+            {
+                UpdateDemeanor(animal, demeanor);
+            }
+            if (kidFriendly != "")
+            {
+                UpdateKidFriendly(animal, kidFriendly);
+            }
+            if (petFriendly != "")
+            {
+                UpdatePetFriendly(animal, petFriendly);
+            }
+
+        }
+
+        public static void UpdateName(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var name = (from n in db.Animals where n.ID == animal.ID select n).FirstOrDefault();
+
+            try
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void UpdateBreed(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var breedID = GetBreedKey(update);
+            animal.breed = breedID;
+
+            db.SubmitChanges();
 
 
         }
 
+        public static int GetBreedKey(string breed)
+        {
+            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            var breedID = (from c in context.Breeds where c.breed1 == breed select c.ID).FirstOrDefault();
+            if (breedID < 0)
+            {
+                Breed newBreed = new Breed();
+                newBreed.breed1 = breed;
+                context.Breeds.InsertOnSubmit(newBreed);
+                try
+                {
+                    context.SubmitChanges();
+                }
+                catch (Exception e)
+                {
+                    UserInterface.DisplayExceptionMessage(e);
+                }
+                return newBreed.ID;
+            }
+            return breedID;
+        }
 
-        
-        
+        public static void UpdateWeight(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var weight = (from w in db.Animals where w.ID == animal.ID select w).FirstOrDefault();
 
+            try
+            {
+                db.SubmitChanges();
+            }
 
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
+        public static void UpdateAge(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var age = (from a in db.Animals where a.ID == animal.ID select a).FirstOrDefault();
+            age.age = Int32.Parse(update);
+            try
+            {
+                db.SubmitChanges();
+            }
 
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
+        public static void UpdateDemeanor(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var demeanor = (from d in db.Animals where d.ID == animal.ID select d).FirstOrDefault();
+            demeanor.demeanor = update;
+            try
+            {
+                db.SubmitChanges();
+            }
 
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
+        public static void UpdateKidFriendly(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var kidFriendly = (from k in db.Animals where k.ID == animal.ID select k).FirstOrDefault();
+            bool isKidFriendly;
+
+            if (update.ToLower()== "yes")
+            {
+                isKidFriendly = true;
+            }
+
+            else
+            {
+                isKidFriendly = false;
+            }
+            animal.kidFriendly = isKidFriendly;
+
+            try
+
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
+
+        public static void UpdatePetFriendly(Animal animal, string update)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var petFriendly = (from p in db.Animals where p.ID == animal.ID select p).FirstOrDefault();
+            bool isPetFriendly;
+
+            if (update.ToLower() == "yes")
+            {
+                isPetFriendly = true;
+            }
+
+            else
+            {
+                isPetFriendly = false;
+            }
+            animal.kidFriendly = isPetFriendly;
+
+            try
+
+            {
+                db.SubmitChanges();
+            }
+
+            catch (Exception e)
+            {
+                UserInterface.DisplayExceptionMessage(e);
+            }
+        }
 
 
 
