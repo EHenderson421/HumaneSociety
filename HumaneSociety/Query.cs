@@ -107,15 +107,15 @@ namespace HumaneSociety
 
         public static Employee GetEmployeeByEmployeeNumber(int employeeNumber)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var employee = (from e in context.Employees where e.employeeNumber == employeeNumber select e).FirstOrDefault();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var employee = (from e in db.Employees where e.employeeNumber == employeeNumber select e).FirstOrDefault();
             return employee;
         }
 
         public static List<ClientAnimalJunction> GetUserAdoptionStatus(Client client)
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
-            var pendingAdoptions = (from p in context.ClientAnimalJunctions where p.client == client.ID select p).ToList();
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var pendingAdoptions = (from p in db.ClientAnimalJunctions where p.client == client.ID select p).ToList();
 
             return pendingAdoptions;
         }
@@ -423,6 +423,17 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
+
+
+        
+        
+
+
+
+
+
+
+
 
 
 
