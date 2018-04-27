@@ -283,10 +283,10 @@ namespace HumaneSociety
             animal.petFriendly = UserInterface.GetBitData("the animal", "pet friendly");
             animal.weight = UserInterface.GetIntegerData("the animal", "the weight of the");
             var dietList = Query.GetDiet();
-            UserInterface.DisplayUserOptions(dietList);
+            UserInterface.DisplayDictionary(dietList);
             animal.diet = UserInterface.GetIntegerData("diet plan", "the animal's");
             var roomList = Query.GetLocation();
-            UserInterface.DisplayUserOptions(roomList);
+            UserInterface.DisplayDictionary(roomList);
             animal.location = UserInterface.GetIntegerData("room", "the animal's");
             Query.AddAnimal(animal);
         }

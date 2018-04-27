@@ -426,33 +426,49 @@ namespace HumaneSociety
                             
         }
 
-        public static List<string> GetBreed()
+        public static Dictionary<int, string> GetBreed()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var breedData = db.Breeds.Select(b => b.breed1).ToList();
-            return breedData;
+            var breedData = db.Breeds.Select(b => b);
+            Dictionary<int, string> breedList = new Dictionary<int, string>();
+            foreach(Breed breed in breedData)
+            {
+                breedList.Add(breed.ID, breed.breed1);
+            }
+            return breedList;
         }
 
-        public static List<string> GetDiet()
+        public static Dictionary<int, string> GetDiet()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var dietPlans = db.DietPlans.Select(d => d.ToString()).ToList();
-            return dietPlans;
+            var dietData = db.DietPlans.Select(d => d);
+            Dictionary<int, string> dietList = new Dictionary<int, string>();
+            foreach (DietPlan diet in dietData)
+            {
+                string planInfo = $"{diet.food}, {diet.amount}";
+                dietList.Add(diet.ID, planInfo);
+            }
+            return dietList;
         }
 
-        public static List<string> GetLocation()
+        public static Dictionary<int, string> GetLocation()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var occupiedRooms = db.Animals.Select(a => a.Room.ToString()).ToList();
-            var allRooms = db.Rooms.Select(r => r.ToString()).ToList();
-            foreach(string room in occupiedRooms)
+            var occupiedRooms = db.Animals.Select(a => a.Room).ToList();
+            var allRooms = db.Rooms.Select(r => r).ToList();
+            foreach(Room room in occupiedRooms)
             {
                 if (allRooms.Contains(room))
                 {
                     allRooms.Remove(room);
                 }
             }
-            return allRooms;
+            Dictionary<int, string> availableRooms = new Dictionary<int, string>();
+            foreach(Room room in allRooms)
+            {
+                availableRooms.Add(room.ID, room.name);
+            }
+            return availableRooms;
 
         }
 
