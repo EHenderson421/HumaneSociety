@@ -426,34 +426,54 @@ namespace HumaneSociety
 
         }
 
-        public static List<string> GetBreed()
+        public static Dictionary<int, string> GetBreed()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var breedData = db.Breeds.Select(b => b.breed1).ToList();
-            return breedData;
+            var breedData = db.Breeds.Select(b => b);
+            Dictionary<int, string> breedList = new Dictionary<int, string>();
+            foreach (Breed breed in breedData)
+            {
+                breedList.Add(breed.ID, breed.breed1);
+            }
+            return breedList;
         }
 
-        public static List<string> GetDiet()
+        public static Dictionary<int, string> GetDiet()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var dietPlans = db.DietPlans.Select(d => d.ToString()).ToList();
-            return dietPlans;
+            var dietData = db.DietPlans.Select(d => d);
+            Dictionary<int, string> dietList = new Dictionary<int, string>();
+            foreach (DietPlan diet in dietData)
+            {
+                string planInfo = $"{diet.food}, {diet.amount}";
+                dietList.Add(diet.ID, planInfo);
+            }
+            return dietList;
         }
 
-        public static List<string> GetLocation()
+        public static Dictionary<int, string> GetLocation()
         {
             HumaneSocietyDataContext db = new HumaneSocietyDataContext();
-            var occupiedRooms = db.Animals.Select(a => a.Room.ToString()).ToList();
-            var allRooms = db.Rooms.Select(r => r.ToString()).ToList();
-            foreach (string room in occupiedRooms)
+
+            var occupiedRooms = db.Animals.Select(a => a.Room).ToList();
+            var allRooms = db.Rooms.Select(r => r).ToList();
+            foreach (Room room in occupiedRooms)
             {
                 if (allRooms.Contains(room))
                 {
                     allRooms.Remove(room);
                 }
             }
-            return allRooms;
+
+            Dictionary<int, string> availableRooms = new Dictionary<int, string>();
+            foreach (Room room in allRooms)
+            {
+                availableRooms.Add(room.ID, room.name);
+            }
+            return availableRooms;
+
         }
+
 
         public static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
         {
@@ -500,7 +520,35 @@ namespace HumaneSociety
             {
                 UpdatePetFriendly(animal, petFriendly);
             }
+        }
+        public static Employee EmployeeLogin(string userName, string password)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var getEmployee = db.Employees.Where(e => e.userName == userName).Select(e => e).FirstOrDefault();
+            if (getEmployee.pass == password)
+            {
+                return getEmployee;
+            }
+            else
+            {
+                getEmployee = null;
+            }
+            return getEmployee;
+        }
 
+        public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            var getEmployee = db.Employees.Where(e => e.email == email).Select(e => e).FirstOrDefault();
+            if (getEmployee.employeeNumber == employeeNumber)
+            {
+                return getEmployee;
+            }
+            else
+            {
+                getEmployee = null;
+            }
+            return getEmployee;
         }
 
         public static void UpdateName(Animal animal, string update)
@@ -606,7 +654,7 @@ namespace HumaneSociety
             var kidFriendly = (from k in db.Animals where k.ID == animal.ID select k).FirstOrDefault();
             bool isKidFriendly;
 
-            if (update.ToLower()== "yes")
+            if (update.ToLower() == "yes")
             {
                 isKidFriendly = true;
             }
@@ -657,8 +705,8 @@ namespace HumaneSociety
                 UserInterface.DisplayExceptionMessage(e);
             }
         }
-
-
-
     }
 }
+
+    
+

@@ -274,7 +274,7 @@ namespace HumaneSociety
             Console.Clear();
             Animal animal = new Animal();
             var breedList = Query.GetBreed();
-            UserInterface.DisplayUserOptions(breedList);
+            UserInterface.DisplayDictionary(breedList);
             animal.breed = UserInterface.GetIntegerData("breed", "the animal's");
             animal.name = UserInterface.GetStringData("name", "the animal's");
             animal.age = UserInterface.GetIntegerData("age", "the animal's");
@@ -283,10 +283,10 @@ namespace HumaneSociety
             animal.petFriendly = UserInterface.GetBitData("the animal", "pet friendly");
             animal.weight = UserInterface.GetIntegerData("the animal", "the weight of the");
             var dietList = Query.GetDiet();
-            UserInterface.DisplayUserOptions(dietList);
+            UserInterface.DisplayDictionary(dietList);
             animal.diet = UserInterface.GetIntegerData("diet plan", "the animal's");
             var roomList = Query.GetLocation();
-            UserInterface.DisplayUserOptions(roomList);
+            UserInterface.DisplayDictionary(roomList);
             animal.location = UserInterface.GetIntegerData("room", "the animal's");
             Query.AddAnimal(animal);
         }
