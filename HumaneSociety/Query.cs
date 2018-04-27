@@ -454,7 +454,22 @@ namespace HumaneSociety
             }
             return allRooms;
 
+        }
 
+        public static Employee EmployeeLogin(string userName, string password)
+        {
+            HumaneSocietyDataContext db = new HumaneSocietyDataContext();
+            Table<Employee> employees = db.GetTable<Employee>();
+            var getEmployee = db.Employees.Where(e => e.userName == userName).Select(e => e).FirstOrDefault();
+            if (getEmployee.pass == password)
+            {
+                return getEmployee;
+            }
+            else
+            {
+                getEmployee = null;
+            }
+            return getEmployee;
         }
 
 
