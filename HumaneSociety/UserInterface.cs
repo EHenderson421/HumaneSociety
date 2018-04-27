@@ -219,5 +219,14 @@ namespace HumaneSociety
             Console.ReadLine();
 
         }
+
+        public static void DisplayDictionary(Dictionary<int, string> dictionary)
+        {
+            foreach(KeyValuePair<int,string> entry in dictionary)
+            {
+                string combo = $"{entry.Key}. {entry.Value}";
+                Console.WriteLine(combo);
+            }
+        }
     }
 }

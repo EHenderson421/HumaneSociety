@@ -274,7 +274,7 @@ namespace HumaneSociety
             Console.Clear();
             Animal animal = new Animal();
             var breedList = Query.GetBreed();
-            UserInterface.DisplayUserOptions(breedList);
+            UserInterface.DisplayDictionary(breedList);
             animal.breed = UserInterface.GetIntegerData("breed", "the animal's");
             animal.name = UserInterface.GetStringData("name", "the animal's");
             animal.age = UserInterface.GetIntegerData("age", "the animal's");
